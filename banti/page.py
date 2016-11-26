@@ -1,14 +1,14 @@
 import os
-import numpy as np
 import statistics as stats
+import logging
 
+import numpy as np
 from scipy.ndimage import interpolation as inter
 from scipy import ndimage as nd
+from scipy.stats import itemfreq
 from PIL import Image as im
 from PIL import ImageDraw as imd
 
-import logging
-from scipy.stats import itemfreq
 from .helpers import img_to_bin_arr, bin_arr_to_rgb_img
 from .conncomp import get_conn_comp
 
@@ -98,8 +98,7 @@ class Page():
             self.angle = coarse_angles[np.argmax(coarse_scores)]
         else:
             self.angle = fine_angles[np.argmax(fine_scores)]
-
-        self.imgarr = inter.rotate(self.imgarr, self.angle, reshape=0, order=0)
+        self.imgarr = inter.rotate(self.imgarr, self.angle, reshape=False, order=0)
         self.ht, self.wd = self.imgarr.shape
         self.img = bin_arr_to_rgb_img(self.imgarr)
         logi("Best Angle: {:.3f}".format(self.angle))
